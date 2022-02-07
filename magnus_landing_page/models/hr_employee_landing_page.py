@@ -180,17 +180,16 @@ class hr_employee_landing_page(models.TransientModel):
 		holidays = [x[0] for x in self.env.cr.fetchall()]
 		return {
 			'name': _('Leaves'),
-			'view_type': 'from',
+			'type': 'ir.actions.act_window',
+			'view_type': 'form',
 			'view_mode': 'tree',
 			'res_model': 'hr.leave',
-			'view_id': False,
 			'views': [(tree_id, 'tree')],
+			'view_id': tree_id,
+			'target': 'current',
 			'domain': [('id', 'in', holidays)],
 			'context': {'search_default_year': 1, 'search_default_group_employee': 1},
-			'target':'current',
-			'type': 'ir.actions.act_window',
 		}
-
 
 	@api.multi
 	def action_view_timesheet_tree(self):
@@ -200,14 +199,14 @@ class hr_employee_landing_page(models.TransientModel):
 		tree_id = tree_res and tree_res[1] or False
 		return {
 			'name': _('Timesheet'),
-			'view_type': 'from',
+			'type': 'ir.actions.act_window',
+			'view_type': 'form',
 			'view_mode': 'tree',
 			'res_model': 'hr_timesheet.sheet',
-			'view_id': False,
 			'views': [(tree_id, 'tree')],
-			'domain': [('employee_id.user_id', '=', self.env.uid)],
+			'view_id': tree_id,
 			'target': 'current',
-			'type': 'ir.actions.act_window',
+			'domain': [('employee_id.user_id', '=', self.env.uid)],
 		}
 
 	@api.multi
@@ -238,20 +237,17 @@ class hr_employee_landing_page(models.TransientModel):
 		entries = [t for item in self.env.cr.fetchall() for t in item]
 		entries = list(set(entries))
 
-
 		return {
 			'name': _('Analytic Entries'),
-			'view_type': 'from',
+			'type': 'ir.actions.act_window',
+			'view_type': 'form',
 			'view_mode': 'tree',
 			'res_model': 'account.analytic.line',
-			'view_id': False,
 			'views': [(tree_id, 'tree')],
-			'domain': [('id', 'in', entries)],
+			'view_id': tree_id,
 			'target': 'current',
-			'type': 'ir.actions.act_window',
+			'domain': [('id', 'in', entries)],
 		}
-
-
 
 	@api.multi
 	def no_popup_window(self):
